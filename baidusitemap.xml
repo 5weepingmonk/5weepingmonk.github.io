@@ -3,6 +3,26 @@
 
 
     
+  <url>
+    <loc>http://yoursite.com/2018/01/15/%E5%98%A4%E5%98%A4%E5%98%A4%EF%BC%8C%E4%B8%80%E5%B9%B4%E5%8F%88%E8%BF%87%E5%8E%BB%E4%BA%86%E3%80%82/</loc>
+    <lastmod>2018-01-24T12:19:46.000Z</lastmod>
+    <data>
+        <display>
+        <title>一点小牢骚</title>
+        <pubTime>2018-01-15T12:45:29.000Z</pubTime>
+        
+        <tag>总结</tag>
+         
+         
+           
+             
+              <breadCrumb title="总结" url="http://yoursite.com/categories/%E6%80%BB%E7%BB%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
     
   <url>
@@ -39,26 +59,6 @@
            
              
               <breadCrumb title="安卓安全" url="http://yoursite.com/categories/%E5%AE%89%E5%8D%93%E5%AE%89%E5%85%A8/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2018/01/15/%E4%B8%80%E7%82%B9%E5%B0%8F%E7%89%A2%E9%AA%9A/</loc>
-    <lastmod>2018-01-15T14:47:01.641Z</lastmod>
-    <data>
-        <display>
-        <title>一点小牢骚</title>
-        <pubTime>2018-01-15T12:45:29.000Z</pubTime>
-        
-        <tag>总结</tag>
-         
-         
-           
-             
-              <breadCrumb title="总结" url="http://yoursite.com/categories/%E6%80%BB%E7%BB%93/"/>
           
         </display>
     </data>
